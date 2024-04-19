@@ -1,3 +1,7 @@
+libr6*
+r6-dissect*
+.env
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
