@@ -3,7 +3,6 @@ import discord
 from discord import app_commands
 from dotenv import load_dotenv
 import pandas as pd
-from tabulate import tabulate
 from zipfile import ZipFile
 from replay_parser import parse_replay_directory
 
@@ -19,7 +18,7 @@ tree = app_commands.CommandTree(client)
 
 @client.event
 async def on_ready():
-    await tree.sync(guild=discord.Object(1120789695148851291))
+    await tree.sync()
 
     # Set status to idle, "awaiting replay file"
     await client.change_presence(activity=discord.Game(name='awaiting replay file'), status=discord.Status.idle)
@@ -27,8 +26,7 @@ async def on_ready():
 
 @tree.command(
     name='parse',
-    description='Upload a zip file of match replays you wish to parse with this command',
-    guild=discord.Object(1120789695148851291)
+    description='Upload a zip file of match replays you wish to parse with this command'
 )
 async def parse_replay(interaction, file: discord.Attachment):
     print('Parse command triggered')
@@ -101,7 +99,6 @@ async def parse_replay(interaction, file: discord.Attachment):
     player_df.to_csv('player_stats.csv', index=False)
 
     # Send files
-    # await interaction.response.send_message('', files=[discord.File('map_stats.csv'), discord.File('player_stats.csv')])
     await interaction.followup.send('', files=[discord.File('map_stats.csv'), discord.File('player_stats.csv')])
 
     # Delete the files

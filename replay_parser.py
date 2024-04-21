@@ -1,20 +1,7 @@
 import subprocess
-import os
 import pandas as pd
-import zipfile
 import json
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-from time import sleep, time
-from datetime import datetime
-from colorama import Fore
-from fuzzywuzzy import fuzz
-import shutil
 
-INFO = f'{Fore.GREEN}[INF]{Fore.RESET} '
-WARN = f'{Fore.YELLOW}[WRN]{Fore.RESET} '
-ERROR = f'{Fore.RED}[ERR]{Fore.RESET} '
-ACTION = f'{Fore.CYAN}[ACT]{Fore.RESET} '
 
 client = None
 roster_sheet = None
@@ -24,7 +11,7 @@ def parse_replay_directory(replay_dir):
     # === Run r6-dissect on extracted replay ===
     # For folder in match_dir, run r6-dissect
     replay_json = {}
-    print(INFO + f'   Running r6-dissect on {replay_dir}')
+    print(f'Running r6-dissect on {replay_dir}')
     replay_json = json.loads(subprocess.run(['./r6-dissect', replay_dir], capture_output=True).stdout.decode('utf-8'))
 
     # Sort rounds by ascending sum of scores
@@ -32,7 +19,7 @@ def parse_replay_directory(replay_dir):
 
     # === Generate stats dataframes from r6-dissect output ===
     # Player Stats
-    print(INFO + '   Parsing player stats')
+    print('Parsing player stats')
     player_df = parse_json_player_stats(replay_json)
     map_df = parse_map_stats(replay_json)
     return map_df, player_df
